@@ -1,7 +1,6 @@
-# Intro-to-SQL
+# Introduction to SQL
 
-
-# Introduction to SQL - Functions and GROUP BY
+# Functions and GROUP BY
 
 ## SELECT statements without FROM clauses
 It's actually possible to write a select statement without an accompanying FROM clause.  After the **`SELECT`** statement write a comma separated list of values. A single row table will be returned.
@@ -114,7 +113,7 @@ The `count` function counts the number of rows in two distinct ways. If `count(*
 select 
     count(*)
 from 
-    science_federal_giving;
+    science_federal_giving_samp;
 ```
 If we use `count` with specific columns then the number of non-missing values are returned.
 
@@ -125,7 +124,7 @@ select
     count(cand_name) as cand_name_count,
     count(1) as count_one
 from
-    science_federal_giving;
+    science_federal_giving_samp;
 ```
 ### Other aggregate functions
 Let's see examples of other aggregate functions on a numeric column like `transaction_amt`
@@ -141,7 +140,7 @@ select
     variance(transaction_amt) as var_amt,
     count(transaction_amt) as count_amt
 from
-    science_federal_giving;
+    science_federal_giving_samp;
 ```
 We can use non-aggregating functions as well. Here we use a regular expression to replace all the values from the first comma onwards with the empty string, effectively deleting them. This will return us the last name of each candidate.
 
@@ -150,7 +149,7 @@ We can use non-aggregating functions as well. Here we use a regular expression t
 select 
     replace(cand_name, ',.*', '') as last_name
 from 
-    science_federal_giving 
+    science_federal_giving_samp 
 limit 10;
 ```
 
@@ -192,7 +191,7 @@ We can use as many aggregating functions as we would like.
 **Example 13**
 ```sql
 select 
-    cmte_pty,
+    cand_pty_affiliation,
     sum(transaction_amt) as total,
     count(1) as number_transactions,
     avg(transaction_amt) as avg_amt,
@@ -202,7 +201,7 @@ select
 from
     science_federal_giving_samp
 group by
-    cmte_pty
+    cand_pty_affiliation
 ```
 
 ### Multiple Aggregating Columns
@@ -228,13 +227,13 @@ Thus far we have only grouped by a single column. Let's group by multiple column
 **Example 15**
 ```sql
 select
-    cmte_pty,
+    cand_pty_affiliation,
     occupation,
     sum(transaction_amt) as total
 from
     science_federal_giving_samp
 group by
-    cmte_pty,
+    cand_pty_affiliation,
     occupation
 order by
     total desc
@@ -246,12 +245,12 @@ In order to group properly, the grouping columns must appear underneath `SELECT`
 **Example 16**
 ```sql
 select
-    cmte_pty,
+    cand_pty_affiliation,
     sum(transaction_amt) as total
 from
     science_federal_giving_samp
 group by
-    cmte_pty,
+    cand_pty_affiliation,
     occupation
 ```
 
@@ -297,7 +296,7 @@ To use everything that we have learned we can query for the total and count of a
 **Example 19**
 ```sql
 select
-    cmte_pty,
+    cand_pty_affiliation,
     employer,
     sum(transaction_amt) as total,
     count(transaction_amt) as total_transactions
@@ -306,17 +305,58 @@ from
 where
     state in ('TX', 'CA')
 group by
-    cmte_pty,
+    cand_pty_affiliation,
     employer
 having
     count(transaction_amt) > 10
 order by  
-    cmte_pty,
+    cand_pty_affiliation,
     total_transactions desc;
 ```
 
 # Exercises
 
+## Exercise 01
+Find the length of the hypotenuse of a right triangle with sides of length 13 and 19.
+
+## Exercise 02
+Use the `substring` function to return the 10th through the 20th characters of the following string 'Today is August 20th, 2017'.
+
+## Exercise 03
+Count the non-missing values of the `state`, `employer` and `transaction_dt` columns.
+
+## Exercise 04
+Think of a clever way to find the number of missing values for each of the columns in exercise 03.
+
+## Exercise 05
+How many candidates are in this dataset?
+
+## Exercise 06
+What is the lexicographic maximum and minimum of the `employer`  and `cand_name` columns? Make sure to alias your column names appropriately.
+
+## Exercise 07
+What is the maximum and minimum length of the candidate name?
+
+## Exercise 08
+Write a query that returns the candidate with the longest name along with the length of his/her name.
+
+## Exercise 09
+Find the average donation per state of the contributor. Order from greatest to least.
+
+## Exercise 10
+Find the average and count of donation per employer. Select only employers that have at least 50 donations.
+
+## Exercise 11
+Find the total amount, count and average donations for each party. 
+
+## Exercise 12
+Find the total donation amount for each party in each state. Order by state and total.
+
+## Exercise 13
+Tweak the query in exercise 12 to only show states Texas and California.
+
+## Exercise 14
+Which office (House, Senate, or President) has the highest average donations?
 
 ## Resources
 * [City of Houston][1] data.world account
